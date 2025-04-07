@@ -1,70 +1,145 @@
-# Getting Started with Create React App
+A robust and scalable framework built using Spring Boot 3 (Java 17) and React to ensure reliability in business operations through automated retry scheduling, intelligent replay handling, and a secure, user-friendly interface.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+🚀 Features
+✅ Retry Mechanism
+Quartz Job Scheduler for retry job execution.
 
-## Available Scripts
+Configurable retry attempts and intervals.
 
-In the project directory, you can run:
+Supports multiple retry strategies:
 
-### `npm start`
+Fixed Interval
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Exponential Backoff
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Jitter
 
-### `npm test`
+Circuit Breaker
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Optional Kafka integration for event-driven retries.
 
-### `npm run build`
+🔁 Replay Process
+Manual transaction replay from UI.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Validates system context during replay.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Supports both stateful and stateless transaction replays.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Configurable scope and timing (immediate/scheduled).
 
-### `npm run eject`
+🔐 User Authentication & Access Control
+Role-based authentication using Spring Security.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Admin and User roles with specific privileges.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Session management and filters for secure API access.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+📊 Monitoring & Dashboard
+React-based dashboard for:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Monitoring transaction status.
 
-## Learn More
+Triggering manual retries/replays.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Viewing logs and reports.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+📬 Email Notification
+Integrated with JavaMailSender and SMTP.
 
-### Code Splitting
+Sends email alerts on retry/replay events.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Customizable templates.
 
-### Analyzing the Bundle Size
+🧾 Logging
+Structured logging with correlation IDs.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Logs every retry/replay event with status.
 
-### Making a Progressive Web App
+Useful for debugging and audits.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+🛠️ Tech Stack
+Backend
+Java 17
 
-### Advanced Configuration
+Spring Boot 3
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Spring Security
 
-### Deployment
+Quartz Scheduler
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+JavaMailSender (SMTP)
 
-### `npm run build` fails to minify
+SLF4J / Logback Logging
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+H2 / MySQL (configurable)
+
+Frontend
+React
+
+Axios
+
+Bootstrap / Tailwind CSS
+
+📁 Project Structure (Backend)
+bash
+Copy
+Edit
+com.chubb
+│
+├── config             # Spring Security, Quartz Configs
+├── controller         # REST Controllers
+├── entity             # JPA Entities: RetryMetadata, ReplayLog, User
+├── repository         # JPA Repositories
+├── service            # Retry, Replay, Email services
+├── serviceImpl        # Business logic implementations
+└── RetryReplayApp.java
+
+🧪 How to Run
+Prerequisites
+Java 17
+
+Maven
+
+Node.js (for frontend)
+
+SMTP credentials for email
+
+Backend
+bash
+Copy
+Edit
+git clone https://github.com/yourusername/retry-replay-framework.git
+cd backend
+./mvnw spring-boot:run
+Frontend
+bash
+Copy
+Edit
+cd frontend
+npm install
+npm start
+📬 Environment Configuration (application.properties)
+properties
+Copy
+Edit
+spring.datasource.url=jdbc:mysql://localhost:3306/retrydb
+spring.datasource.username=root
+spring.datasource.password=yourpassword
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=your_email@gmail.com
+spring.mail.password=your_app_password
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+🧑‍💼 Default User Setup
+You must insert an admin or user manually into the users table with hashed password and roles:
+
+sql
+Copy
+Edit
+INSERT INTO users (username, password) VALUES ('admin', '$2a$10$...'); -- BCrypt hashed password
+INSERT INTO user_role (user_id, role) VALUES (1, 'ADMIN');
+Use the password encoder in SecurityConfig to hash your password.
+
+
